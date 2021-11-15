@@ -15,10 +15,16 @@ namespace Lab3.RNGs
         public uint[] MT;
         public int index;
 
+        public MT19937(uint[] MT = null) 
+        {
+            index = n;
+            this.MT = MT ?? new uint[n];
+        }
+
         public void seed_mt(uint seed)
         {
             index = n;
-            MT = new uint[n];
+            Array.Clear(MT, 0, MT.Length);//MT = new uint[n];
             MT[0] = seed;
 
             for (int i = 1; i < MT.Length; i++)
@@ -41,6 +47,39 @@ namespace Lab3.RNGs
 
             index++;
             return y;
+        }
+        public uint GetState(uint y)
+        {
+            var x = y;
+
+            x = UntemperR(x, l);
+            x = UntemperL(x, t, c);
+            x = UntemperL(x, s, b);
+            x = UntemperR(x, u, d);
+            return x;
+        }
+        public uint UntemperR(uint n, int shift)
+        {
+            uint cur = n;
+            for (int accuracy = shift; accuracy < w; accuracy += shift)
+                cur = n ^ (cur >> shift);
+            return cur;
+        }
+
+        public uint UntemperL(uint n, int shift, uint mask)
+        {
+            uint cur = n;
+            for (int accuracy = shift; accuracy < w; accuracy += shift)
+                cur = n ^ ((cur << shift) & mask);
+            return cur;
+        }
+
+        public uint UntemperR(uint n, int shift, uint mask)
+        {
+            uint cur = n;
+            for (int accuracy = shift; accuracy < w; accuracy += shift)
+                cur = n ^ ((cur >> shift) & mask);
+            return cur;
         }
 
         public void twist()

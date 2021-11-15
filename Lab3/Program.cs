@@ -3,6 +3,7 @@ using Lab3.CrackingRNGs;
 using Lab3.Models;
 using Lab3.RNGs;
 using System;
+using System.Collections;
 
 namespace Lab3
 {
@@ -10,8 +11,30 @@ namespace Lab3
     {
         static void Main(string[] args)
         {
+            CrackMT19937UnknownSeed();
         }
 
+        static void CrackMT19937UnknownSeed()
+        {
+            var states = new uint[624];
+
+            var serverConnection = new ServerConnection();
+            var account = serverConnection.CreateAccountAsync("first70").Result;
+
+            var mt19937 = new MT19937();
+
+            for (int i = 0; i < states.Length; i++) 
+            {
+                var message = serverConnection.MakeBetAsync(account.AccountId, 1, 7777, "BetterMt").Result;
+                mt19937.MT[i] = mt19937.GetState(message.RealNumber);
+            }
+
+            var winNumber = mt19937.extract_number();
+            var winMessage = serverConnection.MakeBetAsync(account.AccountId, 1, winNumber, "BetterMt").Result;
+
+            Console.WriteLine("Win Message: " + winMessage.Message);
+            Console.WriteLine("RealNumber: " + winMessage.RealNumber + " Expected: " + winNumber);
+        }
         static void CrackMT19937()
         {
             var serverConnection = new ServerConnection();
@@ -52,7 +75,7 @@ namespace Lab3
 
                 for (int j = 0; j < 3; j++)
                 {
-                    //states[j] = serverConnection.MakeBetAsync(account.AccountId, 1, 7777, "Lcg").Result.RealNumber;
+                    states[j] = (int)serverConnection.MakeBetAsync(account.AccountId, 1, 7777, "Lcg").Result.RealNumber;
                 }
 
                 if (CrackingLcg.TryCrackUnknownMultiplier(states, Lcg.Modulus, out int multiplier))

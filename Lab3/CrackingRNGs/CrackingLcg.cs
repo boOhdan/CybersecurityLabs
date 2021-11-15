@@ -14,7 +14,7 @@ namespace Lab3.CrackingRNGs
         {
             if (TryGetModularInverse(states[1] - states[0], modulus, out int modinv)) 
             {
-                multiplier = (states[2] - states[1]) * modinv % modulus;
+                multiplier = ((states[2] - states[1]) * modinv % modulus);
                 return true;
             }
 
@@ -44,7 +44,7 @@ namespace Lab3.CrackingRNGs
             {
                 var (g, x, y) = egcd(b % a, a);
 
-                return (g, y - b / a * x, x);
+                return (g, y - (b / a * x), x);
             }
         }
     }
