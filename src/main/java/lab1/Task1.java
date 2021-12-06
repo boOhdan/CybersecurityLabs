@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class Task1 {
 
-	private static final String SOURCE = Config.RESOURCES + "/lab1/source.txt";
+	private static final String SOURCE = Config.RESOURCES + "/lab1/task1 source.txt";
 	private static final String TASK1 = Config.RESOURCES + "/lab1/task1.txt";
 
 	public static void main(String[] args) throws Exception {
