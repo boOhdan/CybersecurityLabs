@@ -5,12 +5,13 @@ import lab1.config.Config;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.stream.Collectors;
 
 public class Task1 {
 
 	private static final String SOURCE = Config.RESOURCES + "/lab1/source.txt";
-	private static final String TARGET = Config.RESOURCES + "/lab1/task1.txt";
+	private static final String TASK1 = Config.RESOURCES + "/lab1/task1.txt";
 
 	public static void main(String[] args) throws Exception {
 		String bits = new String(Files.readAllBytes(Path.of(SOURCE)));
@@ -21,6 +22,6 @@ public class Task1 {
 				.map(String::valueOf)
 				.collect(Collectors.joining());
 
-		Files.writeString(Path.of(TARGET), text);
+		Files.writeString(Path.of(TASK1), new String(Base64.getDecoder().decode(text)));
 	}
 }
