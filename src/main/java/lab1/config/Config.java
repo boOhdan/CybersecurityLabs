@@ -1,4 +1,4 @@
-package com.kpi.config;
+package lab1.config;
 
 public class Config {
 

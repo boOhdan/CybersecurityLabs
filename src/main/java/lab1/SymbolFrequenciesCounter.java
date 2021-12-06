@@ -1,6 +1,6 @@
-package com.kpi;
+package lab1;
 
-import com.kpi.config.Config;
+import lab1.config.Config;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,8 +11,8 @@ import java.util.*;
 
 public class SymbolFrequenciesCounter {
 
-	private static final String SOURCE = Config.RESOURCES + "/task1.txt";
-	private static final String DESTINATION = Config.RESOURCES + "/symbol frequencies.txt";
+	private static final String SOURCE = Config.RESOURCES + "/lab1/task1.txt";
+	private static final String DESTINATION = Config.RESOURCES + "/lab1/symbol frequencies.txt";
 
 	public static void main(String[] args) throws IOException {
 		count();

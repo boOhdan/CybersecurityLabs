@@ -1,6 +1,6 @@
-package com.kpi;
+package lab1;
 
-import com.kpi.config.Config;
+import lab1.config.Config;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 public class Task1 {
 
-	private static final String SOURCE = Config.RESOURCES + "/source.txt";
-	private static final String TARGET = Config.RESOURCES + "/task1.txt";
+	private static final String SOURCE = Config.RESOURCES + "/lab1/source.txt";
+	private static final String TARGET = Config.RESOURCES + "/lab1/task1.txt";
 
 	public static void main(String[] args) throws Exception {
 		String bits = new String(Files.readAllBytes(Path.of(SOURCE)));
