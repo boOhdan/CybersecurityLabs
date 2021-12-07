@@ -10,8 +10,8 @@ import java.nio.file.Path;
 
 public class Task2 {
 
-	private static final String SOURCE = Config.RESOURCES + "lab1/task2 source.txt";
-	private static final String DESTINATION = Config.RESOURCES + "lab1/task2.txt";
+	private static final String SOURCE = Config.RESOURCES + "task2 source.txt";
+	private static final String DESTINATION = Config.RESOURCES + "task2.txt";
 
 	private static final int KEY = '7';
 
