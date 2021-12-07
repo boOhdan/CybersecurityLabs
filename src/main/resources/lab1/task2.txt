@@ -1,95 +1,1 @@
-
-^
-
-		^
-ZX	^
-]
-^]	
-
-	
-
-
-^
-]	Y
-X	
-
-^
-_YZY]	YY
-Y_YZZ
-
-Y
-^
-	
-]	
-X	^
-^
-_YZYX	^_YZZ
-Y
-]
-]	
-
-^
-Y		
-_YZY]_YZZ
-^]
-_YZYX_YZZ
-Y
-]	
-]
-_YZY	_YZZ
-^]
-_YZY	_YZZ
-Y
-]	
-_YZYY_YZZ
-^]
-_YZY^_YZZ
-Y
-
-]	
-]
-	]
-]
-_YZYY_YZZ
-^]
-_YZYX_YZZ
-^
-Y
-]	
-_YZY_YZZ
-^]
-_YZY	_YZZ
-
-
-
-
-^	
-Z^
-		
-
-^	]
-
-
-^^		
-Y
-]ZZ^
-^	
-Y
-X^X^
-	]Z^^
-Y
-^^Y
-	
-
-]	
-	
-Z	]
-^	
-
-		Y
-	Y
-]
-]	
-	
-		Y
-
+Now try a repeating-key XOR cipher. E.g. it should take a string âhello worldâ and, given the key is âkeyâ, xor the first letter âhâ with âkâ, then xor âeâ with âeâ, then âlâ with âyâ, and then xor next char âlâ with âkâ again, then âoâ with âeâ and so on. You may use an index of coincidence, Hamming distance, Kasiski examination, statistical tests or whatever method you feel would show the best result.
