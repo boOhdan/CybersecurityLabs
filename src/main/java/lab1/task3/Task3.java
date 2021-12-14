@@ -39,19 +39,19 @@ public class Task3 {
 	public static void main(String[] args) throws IOException {
 		String encryptedText = new String(Files.readAllBytes(Path.of(SOURCE)));
 		encryptedText = new String(Base64.getDecoder().decode(encryptedText.getBytes()));
-		ForkJoinDecipher.encryptedText = encryptedText;
+		ForkJoinDecrypter.encryptedText = encryptedText;
 
 		long start = System.currentTimeMillis();
 		ForkJoinPool forkJoinPool = new ForkJoinPool();
-		for (int i = 3; i <= 3; i++) {
+		for (int i = 3; i <= 9; i += 3) {
 			char[][] possibleKeySymbols = getPossibleKeySymbols(encryptedText, i);
 			KeyGenerator keyGenerator = new KeyGenerator(possibleKeySymbols);
 			if (keyGenerator.getKeysCount() > MAX_KEYS_COUNT) {
 				continue;
 			}
-			ForkJoinDecipher.totalKeys = keyGenerator.getKeysCount();
+			ForkJoinDecrypter.totalKeys = keyGenerator.getKeysCount();
 
-			Map<String, String> result = forkJoinPool.invoke(new ForkJoinDecipher(keyGenerator));
+			Map<String, String> result = forkJoinPool.invoke(new ForkJoinDecrypter(keyGenerator));
 			try (PrintWriter writer = new PrintWriter(new FileWriter(String.format(DESTINATION_PATTERN, i)))) {
 				result.forEach((k, v) -> {
 					writer.println(k);

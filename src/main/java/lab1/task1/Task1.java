@@ -1,4 +1,4 @@
-package lab1;
+package lab1.task1;
 
 import lab1.config.Config;
 

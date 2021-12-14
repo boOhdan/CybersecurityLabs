@@ -3,7 +3,6 @@ package lab1.task3;
 import lab1.utils.KeyGenerator;
 
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.RecursiveTask;
@@ -11,7 +10,7 @@ import java.util.concurrent.RecursiveTask;
 import static lab1.task3.Task3.decrypt;
 import static lab1.task3.Task3.matchesWords;
 
-public class ForkJoinDecipher extends RecursiveTask<Map<String, String>> {
+public class ForkJoinDecrypter extends RecursiveTask<Map<String, String>> {
 
 	static String encryptedText;
 	private final KeyGenerator keyGenerator;
@@ -21,7 +20,7 @@ public class ForkJoinDecipher extends RecursiveTask<Map<String, String>> {
 	public static long totalKeys;
 	private static long processed = 0;
 
-	public ForkJoinDecipher(KeyGenerator keyGenerator) {
+	public ForkJoinDecrypter(KeyGenerator keyGenerator) {
 		this.keyGenerator = keyGenerator;
 	}
 
@@ -61,8 +60,8 @@ public class ForkJoinDecipher extends RecursiveTask<Map<String, String>> {
 			}
 		}
 
-		var firstTask = new ForkJoinDecipher(new KeyGenerator(firstPart));
-		var secondTask = new ForkJoinDecipher(new KeyGenerator(secondPart)).fork();
+		var firstTask = new ForkJoinDecrypter(new KeyGenerator(firstPart));
+		var secondTask = new ForkJoinDecrypter(new KeyGenerator(secondPart)).fork();
 
 		Map<String, String> result = new HashMap<>();
 		result.putAll(firstTask.compute());
