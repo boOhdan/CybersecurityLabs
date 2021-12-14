@@ -55,4 +55,12 @@ public class KeyGenerator implements Iterator<String>, Iterable<String> {
 			}
 		}
 	}
+
+	public char[][] getKeySymbols() {
+		return keySymbols;
+	}
+
+	public long getKeysCount() {
+		return keysCount;
+	}
 }
