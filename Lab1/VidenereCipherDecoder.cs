@@ -4,24 +4,24 @@ namespace Lab1
 {
     public static class VidenereCipherDecoder
     {
-        public static void FindKeyLength(this string ciphertext)
+        public static void FindKeyLength(string encodedText)
         {
-            for (int i = 0; i < ciphertext.Length; i++)
+            for (int i = 0; i < encodedText.Length; i++)
             {
-                var coincidenceNumber = 0;
-                var offsetСiphertext = ciphertext.Substring(ciphertext.Length - i, i) + ciphertext.Substring(0, ciphertext.Length - i);
+                var n = 0;
+                var offsetText = encodedText.Substring(encodedText.Length - i, i) + encodedText.Substring(0, encodedText.Length - i);
 
-                for (int j = 0; j < ciphertext.Length; j++)
+                for (int j = 0; j < encodedText.Length; j++)
                 {
-                    if (offsetСiphertext[j] == ciphertext[j])
-                        coincidenceNumber++;
+                    if (offsetText[j] == encodedText[j])
+                        n++;
                 }
 
-                Console.WriteLine(coincidenceNumber);
+                Console.WriteLine(n);
             }
         }
 
-        public static string DecodeVigenereCipher(this string ciphertext, int keyLength)
+        public static string DecodeVigenereCipher(string ciphertext, int keyLength)
         {
             var key = string.Empty;
 
@@ -32,7 +32,7 @@ namespace Lab1
 
                 for (int k = 0; k < 128; k++)
                 {
-                    var coincidenceNumber = textChipheredWithSameKeyCharacter.CountCoincidenceNumber(k);
+                    var coincidenceNumber = textChipheredWithSameKeyCharacter.GetCoincidenceNumber(k);
 
                     if (coincidenceNumber > maxCoincidenceNumber.сoincidenceNumber)
                     {
@@ -59,21 +59,21 @@ namespace Lab1
             return result;
         }
 
-        public static int CountCoincidenceNumber(this string text, int keyChar) 
+        public static int GetCoincidenceNumber(this string text, int keyChar) 
         {
-            var coincidenceNumber = 0;
+            var n = 0;
 
-            for (int s = 0; s < text.Length; s++)
+            for (int i = 0; i < text.Length; i++)
             {
-                var decodedChar = (char)(text[s] ^ keyChar);
+                var ch = (char)(text[i] ^ keyChar);
 
-                if (char.IsLetter(decodedChar) || char.IsPunctuation(decodedChar) || char.IsWhiteSpace(decodedChar))
+                if (char.IsLetter(ch) || char.IsPunctuation(ch) || char.IsWhiteSpace(ch))
                 {
-                    coincidenceNumber++;
+                    n++;
                 }
             }
 
-            return coincidenceNumber;
+            return n;
         }
     }
 }

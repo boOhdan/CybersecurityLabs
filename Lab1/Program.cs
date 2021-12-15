@@ -23,7 +23,7 @@ namespace Lab1
                 asciiText += (char)Convert.ToInt32(hexText.Substring(i, 2), 16);
             }
 
-            return asciiText.DecodeXorCipher(((char)55).ToString());
+            return XorCipherDecoder.BruteForceDecode(asciiText).text;
         }
 
         static string Task2(string base64Text)
@@ -31,10 +31,10 @@ namespace Lab1
             var data = Convert.FromBase64String(base64Text);
             var asciiText = Encoding.ASCII.GetString(data);
 
-            //asciiText.FindKeyLength();
+            VidenereCipherDecoder.FindKeyLength(asciiText);
             var keyLength = 3;
 
-            return asciiText.DecodeVigenereCipher(keyLength);
+            return VidenereCipherDecoder.DecodeVigenereCipher(asciiText, keyLength);
         }
     }
 }
