@@ -11,38 +11,48 @@ namespace Lab3
     {
         static void Main(string[] args)
         {
-            CrackMT19937UnknownSeed();
+            var serverConnection = new ServerConnection();
+            var account = serverConnection.CreateAccountAsync("user4").Result;
+
+            CrackLCG(serverConnection, account);
+            CrackMT19937(serverConnection, account);
+            CrackMT19937UnknownSeed(serverConnection, account);
         }
 
-        static void CrackMT19937UnknownSeed()
+        public static void CrackLCG(ServerConnection serverConnection, Account account)
         {
-            var states = new uint[624];
+            var Lcg = new Lcg() { Modulus = (long)Math.Pow(2, 32) };
 
-            var serverConnection = new ServerConnection();
-            var account = serverConnection.CreateAccountAsync("first70").Result;
-
-            var mt19937 = new MT19937();
-
-            for (int i = 0; i < states.Length; i++) 
+            for (int i = 0; i < 100; i++)
             {
-                var message = serverConnection.MakeBetAsync(account.AccountId, 1, 7777, "BetterMt").Result;
-                mt19937.MT[i] = mt19937.GetState(message.RealNumber);
+                var states = new long[3];
+
+                for (int j = 0; j < 3; j++)
+                {
+                    states[j] = serverConnection.MakeBetAsync(account.AccountId, 1, 7777, "Lcg").Result.RealNumber;
+                }
+
+                if (CrackingLcg.TryCrackUnknownMultiplier(states, Lcg.Modulus, out long multiplier))
+                {
+
+                    Lcg.Modulus = (int)Math.Pow(2, 32);
+                    Lcg.Seed = states[^1];
+                    Lcg.Multiplier = multiplier;
+                    Lcg.Increment = CrackingLcg.CrackUnknownIncrement(states, Lcg.Modulus, multiplier);
+
+                    Console.WriteLine($"Multiplier: {Lcg.Multiplier}, Increment {Lcg.Increment}");
+                    Console.WriteLine($"Win Message: {serverConnection.MakeBetAsync(account.AccountId, 1, Lcg.Next(), "Lcg").Result.Message}");
+
+                    break;
+                }
             }
-
-            var winNumber = mt19937.extract_number();
-            var winMessage = serverConnection.MakeBetAsync(account.AccountId, 1, winNumber, "BetterMt").Result;
-
-            Console.WriteLine("Win Message: " + winMessage.Message);
-            Console.WriteLine("RealNumber: " + winMessage.RealNumber + " Expected: " + winNumber);
         }
-        static void CrackMT19937()
-        {
-            var serverConnection = new ServerConnection();
-            var account = serverConnection.CreateAccountAsync("first63").Result;
 
-            uint time = (uint)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            var message = serverConnection.MakeBetAsync(account.AccountId, 1, 7777, "Mt").Result;
+        static void CrackMT19937(ServerConnection serverConnection, Account account)
+        {
             var mt19937 = new MT19937();
+            var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var message = serverConnection.MakeBetAsync(account.AccountId, 1, 7777, "Mt").Result;
 
             int i = 0;
 
@@ -57,53 +67,28 @@ namespace Lab3
             }
 
             var seed = time + i;
-            Console.WriteLine("Seed: " + seed);
-
             var winMessage = serverConnection.MakeBetAsync(account.AccountId, 1, mt19937.extract_number(), "Mt").Result;
+
+            Console.WriteLine("Seed: " + seed);
             Console.WriteLine("Win Message: " + winMessage.Message);
         }
 
-        public static void CrackLCG() 
+        static void CrackMT19937UnknownSeed(ServerConnection serverConnection, Account account)
         {
-            var serverConnection = new ServerConnection();
-            var account = serverConnection.CreateAccountAsync("first22").Result;
-            var Lcg = new Lcg() { Modulus = (int) Math.Pow(2, 32) };
+            var mt19937 = new MT19937();
+            var states = new uint[624];
 
-            for(int i = 0; i < 50; i++) 
+            for (int i = 0; i < states.Length; i++)
             {
-                var states = new int[3];
-
-                for (int j = 0; j < 3; j++)
-                {
-                    states[j] = (int)serverConnection.MakeBetAsync(account.AccountId, 1, 7777, "Lcg").Result.RealNumber;
-                }
-
-                if (CrackingLcg.TryCrackUnknownMultiplier(states, Lcg.Modulus, out int multiplier))
-                {
-                    var TestLcg = new Lcg() { Modulus = (int)Math.Pow(2, 32), Seed = states[^1]};
-
-                    TestLcg.Multiplier = multiplier;
-                    TestLcg.Increment = CrackingLcg.CrackUnknownIncrement(states, Lcg.Modulus, multiplier);
-
-                    var check = true;
-
-                    for(int k = 0; k < 10; k++) 
-                    {
-                        if (TestLcg.Next() != serverConnection.MakeBetAsync(account.AccountId, 1, 7777, "Lcg").Result.RealNumber) 
-                        {
-                            check = false;
-                            break;
-                        }
-                    }
-
-                    if (check) 
-                    {
-                        Lcg = TestLcg;
-
-                        Console.WriteLine($"Multiplier: {TestLcg.Multiplier}, Increment {TestLcg.Increment}");
-                    }
-                }
+                var message = serverConnection.MakeBetAsync(account.AccountId, 1, 7777, "BetterMt").Result;
+                mt19937.MT[i] = mt19937.GetState((uint)message.RealNumber);
             }
+
+            var winNumber = mt19937.extract_number();
+            var winMessage = serverConnection.MakeBetAsync(account.AccountId, 1, winNumber, "BetterMt").Result;
+
+            Console.WriteLine("RealNumber: " + winMessage.RealNumber + " Expected: " + winNumber);
+            Console.WriteLine("Win Message: " + winMessage.Message);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Lab3.Models
         public string Message { get; set;}
 
         [JsonPropertyName("realNumber")]
-        public uint RealNumber { get; set; }
+        public long RealNumber { get; set; }
 
         [JsonPropertyName("account")]
         public Account account { get; set; }

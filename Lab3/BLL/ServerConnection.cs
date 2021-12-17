@@ -27,7 +27,7 @@ namespace Lab3.BLL
             return account;
         }
 
-        public async Task<PlayResult> MakeBetAsync(string playerId, int amountOfMoney, uint theNumberYouBetOn, string mode)
+        public async Task<PlayResult> MakeBetAsync(string playerId, int amountOfMoney, long theNumberYouBetOn, string mode)
         {
             PlayResult playResult = null;
 
