@@ -8,7 +8,7 @@ namespace Lab3.Models
         public string AccountId { get; set; }
 
         [JsonPropertyName("money")]
-        public decimal Money { get; set; }
+        public long Money { get; set; }
 
         [JsonPropertyName("deletionTime")]
         public string DeletionTime { get; set; }
