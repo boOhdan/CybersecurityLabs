@@ -1,4 +1,4 @@
-LCG
+#LCG
 
 Linear congruential generator. {Mode} in link is “Lcg”. Numbers are generated like s:
 public int Next()
