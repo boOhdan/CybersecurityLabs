@@ -10,7 +10,7 @@ namespace Lab4
     {
         public string Top25PasswordsFilePath { get; set; } = "../../../TopPasswords/Top25Passwords.json";
         public string Top100kPasswordsFilePath { get; set; } = "../../../TopPasswords/Top100kPasswords.json";
-        public IList<string> GeneratePasswords(int number) 
+        public List<string> GeneratePasswords(int number) 
         {
             var passwords = new List<string>();
             var random = new Random();

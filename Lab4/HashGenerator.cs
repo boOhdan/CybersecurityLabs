@@ -2,8 +2,8 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
-using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Lab4
 {
@@ -13,39 +13,30 @@ namespace Lab4
         public string WeakPasswordPath { get; set; } = "../../../Passwords/weak.csv";
         public string StrongPasswordPath { get; set; } = "../../../Passwords/strong.csv";
 
-        public string GetMd5Hash(string input)
+        public void GetMd5Hash(List<string> passwords)
         {
-            var date = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
-            var hexDate = Convert.ToHexString(date);
+            using StreamWriter file = new(WeakPasswordPath, append: true);
 
-            WriteToFile(WeakPasswordPath, hexDate);
+            foreach (var p in passwords)
+            {
+                var date = md5.ComputeHash(Encoding.UTF8.GetBytes(p));
+                var hexDate = Convert.ToHexString(date);
 
-            return hexDate;
-        }
-        public bool VerifyMd5Hash(string input, string hash)
-        {
-            var hashOfInput = GetMd5Hash(input);
-            StringComparer comparer = StringComparer.OrdinalIgnoreCase;
-
-            return comparer.Compare(hashOfInput, hash) == 0;
+                file.WriteLine(hexDate);
+            }
         }
 
-        public (string hash, string salt) GetBCryptHash(string input) 
+        public void GetBCryptHash(List<string> passwords) 
         {
-            string salt = BCryptH.GenerateSalt();
-            string hash = BCryptH.HashPassword(input, salt);
+            using StreamWriter file = new(StrongPasswordPath, append: true);
+            
+            foreach (var p in passwords) 
+            {
+                string salt = BCryptH.GenerateSalt();
+                string hash = BCryptH.HashPassword(p, salt);
 
-            WriteToFile(StrongPasswordPath, "salt: " + salt + " hash: " + hash);
-
-            return (hash, salt);
-        }
-
-        public void WriteToFile(string path, string input) 
-        {
-
-            using StreamWriter file = new(path, append: true);
-
-            file.WriteLineAsync(input);
+                file.WriteLine(hash);
+            }
         }
     }
 }
