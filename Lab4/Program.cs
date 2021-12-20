@@ -7,18 +7,15 @@ namespace Lab4
     {
         static void Main(string[] args)
         {
-            var passwordNumber = 100;
+            var passwordNumber = 10;
             var passwordGenerator = new PasswordGenerator();
             var hashGenerator = new HashGenerator();
 
             var md5Passwords = passwordGenerator.GeneratePasswords(passwordNumber);
             var bCryptpasswords = passwordGenerator.GeneratePasswords(passwordNumber);
 
-            for (int i = 0; i < passwordNumber; i++) 
-            {
-                hashGenerator.GetMd5Hash(md5Passwords[i]);
-                hashGenerator.GetBCryptHash(bCryptpasswords[i]);
-            }
+            hashGenerator.GetMd5Hash(md5Passwords);
+            hashGenerator.GetBCryptHash(bCryptpasswords);
         }
     }
 }
