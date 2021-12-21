@@ -1,4 +1,4 @@
-package lab1.task4;
+package lab1.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

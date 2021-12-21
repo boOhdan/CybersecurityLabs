@@ -1,8 +1,8 @@
-package lab1.task4;
+package lab1.utils;
 
+import lab1.utils.Chromosome;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

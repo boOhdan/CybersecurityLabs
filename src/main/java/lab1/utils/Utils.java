@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 public class Utils {
 
-	public static final String ALPHABET = IntStream.range(65, 91).mapToObj(i -> "" + (char) i).collect(Collectors.joining());
+	public static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	public static void countSymbolsFrequency(String text, PrintWriter writer) {
 		List<Map.Entry<Character, Integer>> sortedList = countSymbolsFrequency(text);
