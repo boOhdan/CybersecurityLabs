@@ -20,7 +20,6 @@ public class Task4 {
 			var result = new GeneticAlgorithm(500, 500).decrypt(encryptedText);
 			writer.println(result);
 			writer.println();
-			writer.flush();
 		}
 		long finish = System.currentTimeMillis();
 		System.out.println(finish - start);

@@ -9,4 +9,9 @@ public class Result {
 
     private String key;
     private String text;
+
+    @Override
+    public String toString() {
+        return key + "\n" + text;
+    }
 }

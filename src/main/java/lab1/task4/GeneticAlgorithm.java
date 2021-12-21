@@ -19,22 +19,37 @@ public class GeneticAlgorithm {
 	private static final double SURVIVAL_PERCENTAGE = 0.2;
 
 	private static Map<String, Double> letterFrequencies = new HashMap<>();
-	private static Map<String, Double> bigrams = new HashMap<>();
-	private static Map<String, Double> trigrams = new HashMap<>();
+	private static final Map<String, Double> bigrams = new HashMap<>();
+	private static final Map<String, Double> trigrams = new HashMap<>();
 
 	static {
 		ObjectMapper mapper = new ObjectMapper();
 		var type = new TypeReference<LinkedHashMap<String, Double>>() {};
 		try {
-			String lettersString = new String(Files.readAllBytes(Path.of(Config.RESOURCES + "task4/letterFrequency.json")));
+			/*String lettersString = new String(Files.readAllBytes(Path.of(Config.RESOURCES + "task4/letterFrequency.json")));
 			letterFrequencies = mapper.readValue(lettersString, type);
 			String bigramsString = new String(Files.readAllBytes(Path.of(Config.RESOURCES + "task4/bigramFrequency.json")));
 			bigrams = mapper.readValue(bigramsString, type);
 			String trigramsString = new String(Files.readAllBytes(Path.of(Config.RESOURCES + "task4/trigramFrequency.json")));
-			trigrams = mapper.readValue(trigramsString, type);
+			trigrams = mapper.readValue(trigramsString, type);*/
+
+			readNGrams(Config.RESOURCES + "task4/bigrams.txt", bigrams);
+			readNGrams(Config.RESOURCES + "task4/trigrams.txt", trigrams);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void readNGrams(String sourcePath, Map<String, Double> destination) throws IOException {
+		List<String> lines = Files.readAllLines(Path.of(sourcePath));
+		long sum = lines.stream()
+				.map(str -> str.split(" ")[1])
+				.mapToLong(Long::parseLong)
+				.sum();
+
+		lines.stream()
+				.map(str -> str.split(" "))
+				.forEach(str -> destination.put(str[0], Double.parseDouble(str[1]) / sum));
 	}
 
 	public GeneticAlgorithm(int populationSize, int generationCount) {
@@ -69,7 +84,7 @@ public class GeneticAlgorithm {
 
 	private double fitnessFunction(String decryptedText) {
 		double fitness = 0;
-//		fitness += fitnessFunction(Utils.getNgrams(decryptedText, 1), letterFrequencies);
+		fitness += fitnessFunction(Utils.getNgrams(decryptedText, 1), letterFrequencies);
 		fitness += fitnessFunction(Utils.getNgrams(decryptedText, 2), bigrams);
 		fitness += fitnessFunction(Utils.getNgrams(decryptedText, 3), trigrams);
 
