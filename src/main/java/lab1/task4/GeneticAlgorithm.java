@@ -84,7 +84,6 @@ public class GeneticAlgorithm {
 
 	private double fitnessFunction(String decryptedText) {
 		double fitness = 0;
-		fitness += fitnessFunction(Utils.getNgrams(decryptedText, 1), letterFrequencies);
 		fitness += fitnessFunction(Utils.getNgrams(decryptedText, 2), bigrams);
 		fitness += fitnessFunction(Utils.getNgrams(decryptedText, 3), trigrams);
 
