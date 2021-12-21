@@ -4,10 +4,19 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Utils {
 
+	public static final String ALPHABET = IntStream.range(65, 91).mapToObj(i -> "" + (char) i).collect(Collectors.joining());
+
 	public static void countSymbolsFrequency(String text, PrintWriter writer) {
+		List<Map.Entry<Character, Integer>> sortedList = countSymbolsFrequency(text);
+		sortedList.forEach(e -> writer.println(e.getKey() + " = " + e.getValue()));
+	}
+
+	public static List<Map.Entry<Character, Integer>> countSymbolsFrequency(String text) {
 		Map<Character, Integer> letterFrequencies = new HashMap<>();
 		char[] chars = text.toCharArray();
 		for (int i = 0; i < text.toCharArray().length; i++) {
@@ -20,7 +29,7 @@ public class Utils {
 			return value != 0 ? value : e1.getKey().compareTo(e2.getKey());
 		});
 		Collections.reverse(sortedList);
-		sortedList.forEach(e -> writer.println(e.getKey() + " = " + e.getValue()));
+		return sortedList;
 	}
 
 	public static void countIndexesOfCoincidence(String text, boolean sort, PrintWriter writer) {
@@ -129,5 +138,41 @@ public class Utils {
 			chars[i++] = symbol;
 		}
 		return chars;
+	}
+
+	public static String swap(String source, int index1, int index2) {
+		char[] chars = source.toCharArray();
+		char temp = chars[index1];
+		chars[index1] = chars[index2];
+		chars[index2] = temp;
+
+		return new String(chars);
+	}
+
+	public static Map<String, Double> sort(Map<String, Double> map) {
+		List<Map.Entry<String, Double>> sortedList = new ArrayList<>(map.entrySet());
+		sortedList.sort((e1, e2) -> {
+			int value = e1.getValue().compareTo(e2.getValue());
+			return value != 0 ? value : e1.getKey().compareTo(e2.getKey());
+		});
+		Collections.reverse(sortedList);
+
+		Map<String, Double> result = new LinkedHashMap<>();
+		sortedList.forEach(e -> result.put(e.getKey(), e.getValue()));
+		return result;
+	}
+
+	public static Map<String, Double> getNgrams(String text, int n) {
+		Map<String, Double> ngrams = new HashMap<>();
+		for (int i = 0; i < text.length() - n + 1; i++) {
+			ngrams.merge(text.substring(i, i + n), 1.0,  Double::sum);
+		}
+		return ngrams;
+	}
+
+	public static String replaceChar(String str, int position, char c) {
+		char[] chars = str.toCharArray();
+		chars[position] = c;
+		return String.valueOf(chars);
 	}
 }
