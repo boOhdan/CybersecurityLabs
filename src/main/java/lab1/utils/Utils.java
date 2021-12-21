@@ -162,12 +162,20 @@ public class Utils {
 		return result;
 	}
 
-	public static Map<String, Double> getNgrams(String text, int n) {
-		Map<String, Double> ngrams = new HashMap<>();
+	public static Map<String, Integer> getNgrams(String text, int n) {
+		Map<String, Integer> ngrams = new HashMap<>();
 		for (int i = 0; i < text.length() - n + 1; i++) {
-			ngrams.merge(text.substring(i, i + n), 1.0,  Double::sum);
+			ngrams.merge(text.substring(i, i + n), 1,  Integer::sum);
 		}
 		return ngrams;
+	}
+	
+	public static Map<String, Integer> countWords(String text, Set<String> words) {
+		Map<String, Integer> wordsCount = new HashMap<>();
+		for (String word : words) {
+			wordsCount.put(word, StringUtils.countMatches(text, word));
+		}
+		return wordsCount;
 	}
 
 	public static String replaceChar(String str, int position, char c) {

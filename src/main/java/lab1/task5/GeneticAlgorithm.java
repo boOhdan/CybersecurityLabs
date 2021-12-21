@@ -20,24 +20,43 @@ public class GeneticAlgorithm {
 	private static Map<String, Double> letterFrequencies = new HashMap<>();
 	private static final Map<String, Double> bigrams = new HashMap<>();
 	private static final Map<String, Double> trigrams = new HashMap<>();
+	private static final Map<String, Double> quadgrams = new HashMap<>();
+	private static final Map<String, Double> quintgrams = new HashMap<>();
+	private static Map<String, Double> words = new HashMap<>();
 
 	static {
 		try {
-			readNGrams(Config.RESOURCES + "task4/bigrams.txt", bigrams);
-			readNGrams(Config.RESOURCES + "task4/trigrams.txt", trigrams);
+			readNGrams("bigrams.txt", bigrams);
+			readNGrams("trigrams.txt", trigrams);
+			readNGrams("quadgrams.txt", quadgrams);
+			readNGrams("quintgrams.txt", quintgrams);
+			/*readNGrams("words.txt", words, 2000);
+			words = words.entrySet().stream()
+					.filter(w -> w.getKey().length() > 1)
+					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));*/
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static void readNGrams(String sourcePath, Map<String, Double> destination) throws IOException {
-		List<String> lines = Files.readAllLines(Path.of(sourcePath));
+	private static void readNGrams(String file, Map<String, Double> destination) throws IOException {
+		readNGrams(file, destination, 10_000);
+	}
+
+	private static void readNGrams(String file, Map<String, Double> destination, int limit) throws IOException {
+		List<String> lines = Files.readAllLines(Path.of(Config.RESOURCES + "ngrams/" + file));
+		if (limit == -1) {
+			limit = lines.size();
+		}
+
 		long sum = lines.stream()
+				.limit(limit)
 				.map(str -> str.split(" ")[1])
 				.mapToLong(Long::parseLong)
 				.sum();
 
 		lines.stream()
+				.limit(limit)
 				.map(str -> str.split(" "))
 				.forEach(str -> destination.put(str[0], Double.parseDouble(str[1]) / sum));
 	}
@@ -59,8 +78,10 @@ public class GeneticAlgorithm {
 			System.out.printf("fitness = %s\n", population.getBestChromosome().getFitness());
 		}
 
-		return new Result(population.getBestChromosome().getGenes(),
+		var result = new Result(population.getBestChromosome().getGenes(),
 				SubstitutionDecoder.decrypt(encryptedText, population.getBestChromosome().getGenes()));
+		result.setFitness(fitnessFunction(result.getText()));
+		return result;
 	}
 
 	private void evaluate(String encryptedText) {
@@ -79,11 +100,14 @@ public class GeneticAlgorithm {
 		double fitness = 0;
 		fitness += fitnessFunction(Utils.getNgrams(decryptedText, 2), bigrams);
 		fitness += fitnessFunction(Utils.getNgrams(decryptedText, 3), trigrams);
+		fitness += fitnessFunction(Utils.getNgrams(decryptedText, 4), quadgrams);
+		fitness += fitnessFunction(Utils.getNgrams(decryptedText, 5), quintgrams);
+//		fitness += fitnessFunction(Utils.countWords(decryptedText, words.keySet()), words);
 
 		return fitness;
 	}
 
-	private double fitnessFunction(Map<String, Double> textNGrams, Map<String, Double> ngrams) {
+	private double fitnessFunction(Map<String, Integer> textNGrams, Map<String, Double> ngrams) {
 		double fitness = 0;
 		for (String key : textNGrams.keySet()) {
 			double count = textNGrams.get(key);
@@ -113,12 +137,12 @@ public class GeneticAlgorithm {
 	}
 
 	private List<Chromosome> crossover(Chromosome parent1, Chromosome parent2) {
-		Random random = new Random();
 		var child1 = new Chromosome(false, keysNumber);
 		var child2 = new Chromosome(false, keysNumber);
 		for (int i = 0; i < keysNumber; i++) {
 			String gene1 = parent1.getGenes().get(i);
 			String gene2 = parent2.getGenes().get(i);
+			Random random = new Random();
 			int end = random.nextInt(gene1.length()) + 1;
 			int start = random.nextInt(end);
 

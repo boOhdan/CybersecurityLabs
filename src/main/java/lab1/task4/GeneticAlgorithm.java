@@ -1,7 +1,5 @@
 package lab1.task4;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lab1.config.Config;
 import lab1.utils.Utils;
 
@@ -23,18 +21,9 @@ public class GeneticAlgorithm {
 	private static final Map<String, Double> trigrams = new HashMap<>();
 
 	static {
-		ObjectMapper mapper = new ObjectMapper();
-		var type = new TypeReference<LinkedHashMap<String, Double>>() {};
 		try {
-			/*String lettersString = new String(Files.readAllBytes(Path.of(Config.RESOURCES + "task4/letterFrequency.json")));
-			letterFrequencies = mapper.readValue(lettersString, type);
-			String bigramsString = new String(Files.readAllBytes(Path.of(Config.RESOURCES + "task4/bigramFrequency.json")));
-			bigrams = mapper.readValue(bigramsString, type);
-			String trigramsString = new String(Files.readAllBytes(Path.of(Config.RESOURCES + "task4/trigramFrequency.json")));
-			trigrams = mapper.readValue(trigramsString, type);*/
-
-			readNGrams(Config.RESOURCES + "task4/bigrams.txt", bigrams);
-			readNGrams(Config.RESOURCES + "task4/trigrams.txt", trigrams);
+			readNGrams(Config.RESOURCES + "ngrams/bigrams.txt", bigrams);
+			readNGrams(Config.RESOURCES + "ngrams/trigrams.txt", trigrams);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -90,7 +79,7 @@ public class GeneticAlgorithm {
 		return fitness;
 	}
 
-	private double fitnessFunction(Map<String, Double> textNGrams, Map<String, Double> ngrams) {
+	private double fitnessFunction(Map<String, Integer> textNGrams, Map<String, Double> ngrams) {
 		double fitness = 0;
 		for (String key : textNGrams.keySet()) {
 			double count = textNGrams.get(key);
