@@ -1,4 +1,4 @@
-package lab1.utils;
+package lab1.task4;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;

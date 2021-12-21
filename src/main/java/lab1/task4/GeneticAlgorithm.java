@@ -3,9 +3,6 @@ package lab1.task4;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lab1.config.Config;
-import lab1.utils.Chromosome;
-import lab1.utils.Population;
-import lab1.utils.Result;
 import lab1.utils.Utils;
 
 import java.io.IOException;

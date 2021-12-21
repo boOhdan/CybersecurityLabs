@@ -1,6 +1,6 @@
-package lab1.utils;
+package lab1.task4;
 
-import lab1.utils.Chromosome;
+import lab1.task4.Chromosome;
 import lombok.Data;
 
 import java.util.List;
