@@ -1,7 +1,7 @@
 package lab1.task5;
 
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,10 +12,11 @@ import java.util.stream.Collectors;
 import static lab1.utils.Utils.ALPHABET;
 
 @Data
+@NoArgsConstructor
 public class Chromosome implements Comparable<Chromosome> {
 
-	private List<String> genes = new ArrayList<>();
-	private double fitness;
+	protected List<String> genes = new ArrayList<>();
+	protected double fitness;
 
 	public Chromosome(int keysNumber) {
 		this(true, keysNumber);
@@ -31,9 +32,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 	}
 
-	public Chromosome(List<String> genes) {
-		this.genes = genes;
-	}
+	public void improveGenes() {}
 
 	@Override
 	public int compareTo(Chromosome o) {

@@ -137,8 +137,8 @@ public class GeneticAlgorithm {
 	}
 
 	private List<Chromosome> crossover(Chromosome parent1, Chromosome parent2) {
-		var child1 = new Chromosome(false, keysNumber);
-		var child2 = new Chromosome(false, keysNumber);
+		var child1 = new GmoChromosome(false, keysNumber);
+		var child2 = new GmoChromosome(false, keysNumber);
 		for (int i = 0; i < keysNumber; i++) {
 			String gene1 = parent1.getGenes().get(i);
 			String gene2 = parent2.getGenes().get(i);
@@ -149,6 +149,8 @@ public class GeneticAlgorithm {
 			child1.getGenes().add(crossoverForOneChild(gene1, gene2, start, end));
 			child2.getGenes().add(crossoverForOneChild(gene2, gene1, start, end));
 		}
+		child1.improveGenes();
+		child2.improveGenes();
 
 		return List.of(child1, child2);
 	}

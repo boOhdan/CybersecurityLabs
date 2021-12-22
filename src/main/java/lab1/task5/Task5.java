@@ -19,8 +19,14 @@ public class Task5 {
 	private static final String SOURCE = Config.RESOURCES + "task5/source.txt";
 	private static final String DESTINATION = Config.RESOURCES + "task5/result.txt";
 
+	private static final String DECRYPTED_PART = "CONGRATULATIONS";
+	private static final int KEYS_NUMBER = 4;
+
 	public static void main(String[] args) throws IOException {
 		String encryptedText = new String(Files.readAllBytes(Path.of(SOURCE)));
+		var correctGenes = SubstitutionDecoder.getKeysPart(encryptedText, DECRYPTED_PART, KEYS_NUMBER);
+		GmoChromosome.correctGenes.addAll(correctGenes);
+
 		long start = System.currentTimeMillis();
 		computeParallel(encryptedText);
 		long finish = System.currentTimeMillis();
@@ -29,10 +35,12 @@ public class Task5 {
 
 	@SneakyThrows
 	private static void computeParallel(String encryptedText) {
-		var executor = Executors.newFixedThreadPool(10);
+		int threadCount = 10;
+		int n = 1;
+		var executor = Executors.newFixedThreadPool(threadCount);
 		List<Future<Result>> futures = new ArrayList<>();
-		for (int i = 0; i < 50; i++) {
-			var future = executor.submit(() -> new GeneticAlgorithm(500, 400, 4).decrypt(encryptedText));
+		for (int i = 0; i < threadCount * n; i++) {
+			var future = executor.submit(() -> new GeneticAlgorithm(500, 400, KEYS_NUMBER).decrypt(encryptedText));
 			futures.add(future);
 		}
 

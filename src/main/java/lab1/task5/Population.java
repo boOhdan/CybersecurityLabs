@@ -12,7 +12,7 @@ public class Population {
 	private List<Chromosome> chromosomes;
 
 	public Population(int size, int keysNumber) {
-		this.chromosomes = Stream.generate(() -> new Chromosome(keysNumber)).limit(size).collect(Collectors.toList());
+		this.chromosomes = Stream.generate(() -> new GmoChromosome(keysNumber)).limit(size).collect(Collectors.toList());
 	}
 
 	public int getSize() {
