@@ -19,7 +19,7 @@ public class Task5 {
 	private static final String SOURCE = Config.RESOURCES + "task5/source.txt";
 	private static final String DESTINATION = Config.RESOURCES + "task5/result.txt";
 
-	private static final String DECRYPTED_PART = "CONGRATULATIONS";
+	private static final String DECRYPTED_PART = "CONGRATULATIONSTHISWASNTQUITEANEASYTASKNOCALLTHISTEXTISJUSTGA__AGETOLETYOUUSESOMEFREQUENCBANALYS";
 	private static final int KEYS_NUMBER = 4;
 
 	public static void main(String[] args) throws IOException {
@@ -36,7 +36,7 @@ public class Task5 {
 	@SneakyThrows
 	private static void computeParallel(String encryptedText) {
 		int threadCount = 10;
-		int n = 1;
+		int n = 3;
 		var executor = Executors.newFixedThreadPool(threadCount);
 		List<Future<Result>> futures = new ArrayList<>();
 		for (int i = 0; i < threadCount * n; i++) {

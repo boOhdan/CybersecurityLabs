@@ -19,8 +19,13 @@ public class SubstitutionDecoder {
 	public static List<GuessedKeySymbol> getKeysPart(String encryptedText, String decryptedPart, int numberOfKeys) {
 		Set<GuessedKeySymbol> result = new HashSet<>();
 		for (int i = 0; i < decryptedPart.length(); i++) {
+			char symbol = decryptedPart.charAt(i);
+			if (symbol == '_') {
+				continue;
+			}
+
 			var guessedSymbol = new GuessedKeySymbol()
-					.setSymbol(decryptedPart.charAt(i))
+					.setSymbol(symbol)
 					.setIndex(Utils.ALPHABET.indexOf(encryptedText.charAt(i)))
 					.setGene(i % numberOfKeys);
 			result.add(guessedSymbol);
