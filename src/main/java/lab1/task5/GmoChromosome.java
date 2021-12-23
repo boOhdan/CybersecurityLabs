@@ -1,7 +1,9 @@
 package lab1.task5;
 
+import lab1.utils.Utils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class GmoChromosome extends Chromosome {
 
-	public final static List<GuessedKeySymbol> correctGenes = new ArrayList<>();
+	public static final List<GuessedKeySymbol> correctGenes = new ArrayList<>();
+	public static boolean onlyCorrectGenes;
 
 	public GmoChromosome(int keysNumber) {
 		super(keysNumber);
@@ -25,6 +28,14 @@ public class GmoChromosome extends Chromosome {
 
 	@Override
 	public void improveGenes() {
+		if (onlyCorrectGenes) {
+			int genesSize = genes.size();
+			genes = new ArrayList<>();
+			for (int i = 0; i < genesSize; i++) {
+				genes.add(StringUtils.repeat("_", Utils.ALPHABET.length()));
+			}
+		}
+
 		for (var correctGene : correctGenes) {
 			int geneIndex = correctGene.getGene();
 			String curGene = genes.get(geneIndex);
@@ -34,7 +45,9 @@ public class GmoChromosome extends Chromosome {
 				char[] chars = curGene.toCharArray();
 				char temp = curGene.charAt(correctGene.getIndex());
 				chars[correctGene.getIndex()] = correctGene.getSymbol();
-				chars[index] = temp;
+				if (index > 0) {
+					chars[index] = temp;
+				}
 
 				genes.set(geneIndex, new String(chars));
 			}

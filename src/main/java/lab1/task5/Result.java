@@ -3,7 +3,6 @@ package lab1.task5;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -23,6 +22,6 @@ public class Result implements Comparable<Result> {
 
 	@Override
 	public String toString() {
-		return keys + "\n" + fitness + "\n" + text;
+		return keys + "\n" + text;
 	}
 }

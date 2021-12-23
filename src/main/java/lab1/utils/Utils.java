@@ -180,7 +180,9 @@ public class Utils {
 
 	public static String replaceChar(String str, int position, char c) {
 		char[] chars = str.toCharArray();
-		chars[position] = c;
+		if (position > 0) {
+			chars[position] = c;
+		}
 		return String.valueOf(chars);
 	}
 }
