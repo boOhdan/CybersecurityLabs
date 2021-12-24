@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Folders
 artifacts/
 bin/
@@ -50,3 +51,7 @@ terraform.tfstate.backup
 *.AssemblyInfo.cs
 
 !packages/repositories.config
+
+.idea
+target
+*.iml
