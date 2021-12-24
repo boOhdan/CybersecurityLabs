@@ -9,4 +9,8 @@
     <PackageReference Include="BCrypt.Net" Version="0.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="hashcat\dictionaries" />
+  </ItemGroup>
+
 </Project>
