@@ -33,8 +33,7 @@ public class RegistrationValidator implements Validator {
 				new UppercaseCharacterRule(1),
 				new DigitCharacterRule(1),
 				new SpecialCharacterRule(1),
-				new AlphabeticalSequenceRule(3,false),
-				new QwertySequenceRule(3,false),
+				new QwertySequenceRule(4,false),
 				new WhitespaceRule()));
 		var ruleResult = validator.validate(new PasswordData(password));
 
