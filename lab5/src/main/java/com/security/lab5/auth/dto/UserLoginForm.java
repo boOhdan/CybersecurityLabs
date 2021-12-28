@@ -1,10 +1,11 @@
 package com.security.lab5.auth.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class UserRegistrationDto {
+@AllArgsConstructor
+public class UserLoginForm {
 	private String username;
 	private String password;
-	private String repeatPassword;
 }

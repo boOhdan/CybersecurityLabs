@@ -1,8 +1,8 @@
 package com.security.lab5.auth;
 
 import com.security.lab5.auth.dto.AuthUserDto;
-import com.security.lab5.auth.dto.UserLoginDto;
-import com.security.lab5.auth.dto.UserRegistrationDto;
+import com.security.lab5.auth.dto.UserLoginForm;
+import com.security.lab5.auth.dto.RegistrationForm;
 import com.security.lab5.auth.entity.AuthUser;
 import com.security.lab5.user.UserService;
 import com.security.lab5.user.entity.User;
@@ -22,17 +22,17 @@ public class AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 
-	public AuthUserDto register(UserRegistrationDto userRegistration) {
+	public AuthUserDto register(RegistrationForm registrationForm) {
 		var user = new User();
-		user.setUsername(userRegistration.getUsername());
-		user.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
+		user.setUsername(registrationForm.getUsername());
+		user.setPassword(passwordEncoder.encode(registrationForm.getPassword()));
 		userService.save(user);
 
 		return login(user.getUsername(), user.getPassword());
 	}
 
-	public AuthUserDto login(UserLoginDto userLogin) {
-		return login(userLogin.getUsername(), userLogin.getPassword());
+	public AuthUserDto login(UserLoginForm loginForm) {
+		return login(loginForm.getUsername(), loginForm.getPassword());
 	}
 
 	public AuthUserDto login(String username, String password) {
@@ -41,12 +41,14 @@ public class AuthService {
 			auth = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(username, password)
 			);
-		}
-		catch (BadCredentialsException e) {
-			throw new RuntimeException("Incorrect username or password", e);
+		} catch (BadCredentialsException e) {
+			return new AuthUserDto()
+					.setHasErrors(true)
+					.setErrors("Incorrect username or password");
+
 		}
 
-		var currentUser = (AuthUser)auth.getPrincipal();
+		var currentUser = (AuthUser) auth.getPrincipal();
 		var user = userService.getUserById(currentUser.getId());
 		return new AuthUserDto(true, user);
 	}
