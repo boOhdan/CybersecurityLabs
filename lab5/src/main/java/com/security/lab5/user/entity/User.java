@@ -1,0 +1,27 @@
+package com.security.lab5.user.entity;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.util.UUID;
+
+@Getter
+@Setter
+public class User {
+
+	@Id
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(name = "id", updatable = false, nullable = false)
+	private UUID id;
+
+	@Column(unique = true, updatable = false, nullable = false)
+	private String username;
+
+	private String password;
+
+}
