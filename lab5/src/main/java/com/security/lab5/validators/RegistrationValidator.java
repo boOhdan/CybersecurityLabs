@@ -22,6 +22,9 @@ public class RegistrationValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		var userRegistration = (RegistrationForm) target;
 		validatePassword(userRegistration.getPassword(), errors);
+		if (!userRegistration.getPassword().equals(userRegistration.getRepeatPassword())) {
+			errors.rejectValue("repeatPassword", null, "passwords not equal");
+		}
 	}
 
 	private void validatePassword(String password, Errors errors) {

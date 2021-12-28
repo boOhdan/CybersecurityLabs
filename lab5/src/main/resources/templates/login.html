@@ -29,7 +29,7 @@
                     <div class="col-md-6 mt-5">
                         <input type="submit" class="btn btn-primary" value="Submit">
                         <a th:href="@{/registration}">Registration</a>
-                        <p th:if="${loginResult?.loggedIn}" th:text="${loginResult.user.username}"></p>
+                        <p th:if="${loginResult?.loggedIn}" th:text="${loginResult.user.id}"></p>
                         <p class="text-danger" th:if="${loginResult?.hasErrors}" th:text="${loginResult.errors}"></p>
                     </div>
 
