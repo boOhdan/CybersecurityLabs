@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 public class AuthUserDto {
 	private boolean loggedIn;
 	private UserDto user;
+	private String token;
 	private boolean hasErrors;
 	private String errors;
 

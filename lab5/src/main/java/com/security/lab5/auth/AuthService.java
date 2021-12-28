@@ -21,6 +21,7 @@ public class AuthService {
 	private final UserService userService;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
+	private final TokenService tokenService;
 
 	public AuthUserDto register(RegistrationForm registrationForm) {
 		var user = new User();
@@ -49,8 +50,12 @@ public class AuthService {
 		}
 
 		var currentUser = (AuthUser) auth.getPrincipal();
+		String jwt = tokenService.generateToken(currentUser);
 		var user = userService.getUserById(currentUser.getId());
-		return new AuthUserDto(true, user);
+		return new AuthUserDto()
+				.setLoggedIn(true)
+				.setUser(user)
+				.setToken(jwt);
 	}
 
 }

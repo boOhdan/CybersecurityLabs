@@ -11,7 +11,7 @@
           crossorigin="anonymous">
 </head>
 <body>
-    <div class="container my-5">
+    <div class="container my-5" th:width="500px">
         <h2 class="mb-5">Login</h2>
         <div class="row">
             <div class="col-md-6">
@@ -29,7 +29,7 @@
                     <div class="col-md-6 mt-5">
                         <input type="submit" class="btn btn-primary" value="Submit">
                         <a th:href="@{/registration}">Registration</a>
-                        <p th:if="${loginResult?.loggedIn}" th:text="${loginResult.user.id}"></p>
+                        <p th:if="${loginResult?.loggedIn}" th:text="${loginResult.token}"></p>
                         <p class="text-danger" th:if="${loginResult?.hasErrors}" th:text="${loginResult.errors}"></p>
                     </div>
                 </form>

@@ -11,7 +11,7 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.UUID;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class RequestScopeConfig {
 
