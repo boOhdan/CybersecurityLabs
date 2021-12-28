@@ -24,8 +24,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.antMatchers("/", "/login", "/registration").permitAll()
+				.antMatchers("/", "/login", "/registration", "/logout").permitAll()
 				.anyRequest().authenticated()
+				/*.and()
+				.formLogin()
+				.loginPage("/login")
+				.loginProcessingUrl("/login")
+				.and()
+				.logout()
+				.invalidateHttpSession(true)
+				.deleteCookies("JSESSIONID")
+				.logoutSuccessUrl("/login")
+				.and()
+				.rememberMe()
+				.key("secretKey")
+				.alwaysRemember(true)
+				.and()
+				.csrf().disable();*/
 				.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
