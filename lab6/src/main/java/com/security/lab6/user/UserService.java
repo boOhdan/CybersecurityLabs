@@ -35,6 +35,9 @@ public class UserService implements UserDetailsService {
 	}
 
 	private UserDto userToUserDto(User user) {
-		return new UserDto(user.getId(), user.getUsername());
+		return new UserDto()
+				.setId(user.getId())
+				.setUsername(user.getUsername())
+				.setPhone(user.getPhone());
 	}
  }

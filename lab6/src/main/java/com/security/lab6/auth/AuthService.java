@@ -24,8 +24,11 @@ public class AuthService {
 
 	public AuthUserDto register(RegistrationForm registrationForm) {
 		var user = new User();
-		user.setUsername(registrationForm.getUsername());
-		user.setPassword(passwordEncoder.encode(registrationForm.getPassword()));
+		user
+				.setUsername(registrationForm.getUsername())
+				.setPassword(passwordEncoder.encode(registrationForm.getPassword()))
+				.setPhone(registrationForm.getPhone());
+
 		userService.save(user);
 
 		return login(user.getUsername(), user.getPassword());
