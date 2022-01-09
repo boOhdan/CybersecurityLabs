@@ -26,8 +26,8 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
 
 	private static final String AES = "AES/GCM/NoPadding";
 
-	public AttributeEncryptor(@Value("${secret.key}") String secretKey) {
-		key = new SecretKeySpec(secretKey.getBytes(), "AES");
+	public AttributeEncryptor(@Value("${secret.key.dek}") String dataEncryptionKey) {
+		key = new SecretKeySpec(dataEncryptionKey.getBytes(), "AES");
 	}
 
 	@SneakyThrows
