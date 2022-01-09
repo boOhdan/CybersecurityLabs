@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Spring Registration Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+</head>
+<body>
+    <div class="container my-5">
+        <h2 class="mb-5">Registration</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <form action="#" th:action="@{/registration}" th:object="${registrationForm}" method="post">
+
+                    <div class="form-group">
+                        <input type="text" th:field="*{username}" class="form-control"
+                               id="username" placeholder="username">
+                        <span th:if="${#fields.hasErrors('username')}"
+                              th:text="${#fields.errors('username')[0]}" class="text-danger">
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" th:field="*{password}" class="form-control"
+                               id="password" placeholder="Password">
+
+                        <ul class="text-danger"
+                            th:each="error: ${#fields.errors('password')}">
+                            <li th:each="message : ${error.split(',')}">
+                                <p class="error-message"
+                                   th:text="${message}"></p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" th:field="*{repeatPassword}" class="form-control"
+                               id="repeatPassword" placeholder="Repeat password">
+                        <p class="text-danger" th:if="${#fields.hasErrors('repeatPassword')}"
+                           th:text="${#fields.errors('repeatPassword')[0]}">
+                        </p>
+                    </div>
+
+                    <div class="col-md-6 mt-5">
+                        <input type="submit" class="btn btn-primary" value="Submit">
+                        <a th:href="@{/login}">Login</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
