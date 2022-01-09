@@ -29,7 +29,6 @@ public class User {
 
 	private String password;
 
-	@Column(columnDefinition = "bytea")
 	@Convert(converter = AttributeEncryptor.class)
 	private String phone;
 
