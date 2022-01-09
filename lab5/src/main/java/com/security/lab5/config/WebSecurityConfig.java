@@ -9,10 +9,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -20,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final UserService userService;
-	private final JwtRequestFilter jwtRequestFilter;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -28,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/", "/login", "/registration", "/logout").permitAll()
 				.anyRequest().authenticated()
-				/*.and()
+				.and()
 				.formLogin()
 				.loginPage("/login")
 				.loginProcessingUrl("/login")
@@ -42,11 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.key("secretKey")
 				.alwaysRemember(true)
 				.and()
-				.csrf().disable();*/
-				.and()
-				.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.csrf().disable();
 	}
 
 	@Override
@@ -58,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		return new Argon2PasswordEncoder();
 	}
 
 	@Override
