@@ -29,6 +29,9 @@
                     <div class="col-md-6 mt-5">
                         <input type="submit" class="btn btn-primary" value="Submit">
                         <a th:href="@{/registration}">Registration</a>
+                        <div>
+                            <a th:href="@{/home}">Home</a>
+                        </div>
                         <p th:if="${loginResult?.loggedIn}" th:text="${loginResult.token}"></p>
                         <p class="text-danger" th:if="${loginResult?.hasErrors}" th:text="${loginResult.errors}"></p>
                     </div>
