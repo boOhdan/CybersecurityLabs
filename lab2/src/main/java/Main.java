@@ -1,3 +1,6 @@
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,74 +17,51 @@ public class Main {
 	private static final String WORD = "The ";
 	private static final String DESTINATION = "src/main/resources/decrypted.txt";
 
+	private static final double MATCH_PERCENTAGE = 0.5;
+
 	private static final String KEY_PART = "";
 
 	public static void main(String[] args) throws IOException {
-		List<String> ciphers = Files.lines(Path.of("src/main/resources/encrypted.txt"))
+		List<byte[]> ciphers = Files.lines(Path.of("src/main/resources/encrypted.txt"))
 				.map(Main::hexStringToNormal)
 				.collect(Collectors.toList());
 
-		Map<Double, String> decryptedWords = new HashMap<>();
+		List<String> decryptedWords = new ArrayList<>();
 
 		for (int i = 0; i < ciphers.size(); i++) {
-			for (int j = i + 1; j < ciphers.size(); j++) {
-				String cipher1 = ciphers.get(i);
-				String cipher2 = ciphers.get(j);
+			for (byte[] cipher2 : ciphers) {
+				byte[] cipher1 = ciphers.get(i);
 
-				int minLength = Math.min(cipher1.length(), cipher2.length());
-				cipher1 = cipher1.substring(0, minLength);
-				cipher2 = cipher2.substring(0, minLength);
+				int minLength = Math.min(cipher1.length, cipher2.length);
+				byte[] cipher1Copy = new byte[minLength];
+				byte[] cipher2Copy = new byte[minLength];
+				System.arraycopy(cipher1, 0, cipher1Copy, 0, minLength);
+				System.arraycopy(cipher2, 0, cipher2Copy, 0, minLength);
 
-				String xoredCiphers = xor(cipher1, cipher2);
+				byte[] xoredCiphers = xor(cipher1Copy, cipher2Copy);
 
-				String decrypted = xor(xoredCiphers, WORD);
-				double wordPercentage = wordPercentage(decrypted);
+				String decrypted = new String(xor(xoredCiphers, WORD.getBytes()));
 
-				decryptedWords.put(wordPercentage, decrypted);
-
-				System.out.println("Source line: " + i + "; Result = " + decrypted);
+				if (wordMatches(decrypted)) {
+					decryptedWords.add("Source line: " + (i + 1) + "; Result = " + decrypted);
+				}
 			}
 		}
 
-		var sortedList = decryptedWords.entrySet().stream()
-				.sorted(Map.Entry.<Double, String>comparingByKey().reversed())
-				.map(Map.Entry::getValue)
-				.collect(Collectors.toList());
-
 		try (PrintWriter writer = new PrintWriter(new FileWriter(DESTINATION))) {
-			for (String output : sortedList) {
+			for (String output : decryptedWords) {
 				writer.println(output);
 				writer.println();
 			}
 		}
 	}
 
-	public static String hexStringToNormal(String hex) {
-		StringBuilder result = new StringBuilder();
-		String[] hexBytes = hex.split("(?<=\\G.{2})");
-		Arrays.stream(hexBytes)
-				.map(b -> (char) Integer.parseInt(b, 16))
-				.forEach(result::append);
-
-		return result.toString();
-	}
-
-	public static String stringToHex(String input) {
-		StringBuilder result = new StringBuilder();
-		for (char c : input.toCharArray()) {
-			result.append(Integer.toString(c, 16));
+	public static byte[] hexStringToNormal(String hex) {
+		try {
+			return Hex.decodeHex(hex);
+		} catch (DecoderException e) {
+			throw new RuntimeException(e);
 		}
-		return result.toString();
-	}
-
-	public static String xor(String encrypted, String key) {
-		byte[] bytes = xor(encrypted.getBytes(), key.getBytes());
-		StringBuilder result = new StringBuilder();
-		for (byte b : bytes) {
-			result.append((char) b);
-		}
-
-		return result.toString();
 	}
 
 	public static byte[] xor(byte[] encrypted, byte[] key) {
@@ -94,17 +74,13 @@ public class Main {
 		return decrypted;
 	}
 
-	public static double wordPercentage(String text) {
+	public static boolean wordMatches(String text) {
 		var matcher = wordPattern.matcher(text);
 		int matchLength = 0;
 		while (matcher.find()) {
 			matchLength += matcher.group().length();
 		}
 
-		return (double) matchLength / text.length();
-	}
-
-	public static String getKeyPart(String encrypted, String decrypted) {
-		return xor(encrypted, decrypted);
+		return (double) matchLength / text.length() >= MATCH_PERCENTAGE;
 	}
 }
