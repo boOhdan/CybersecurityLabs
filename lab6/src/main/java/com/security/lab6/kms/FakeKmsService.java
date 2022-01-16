@@ -13,7 +13,7 @@ import java.security.spec.AlgorithmParameterSpec;
 import java.util.Base64;
 
 @Service
-public class FakeKmsService {
+public class FakeKmsService implements IKmsService {
     private final SecureRandom secureRandom = new SecureRandom();
     private static final int GCM_IV_LENGTH = 12;
     private final int tLen = 128;
