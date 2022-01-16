@@ -11,8 +11,10 @@ public class Main {
 
 	private static final Pattern wordPattern = Pattern.compile("[\\p{Alpha} ]+");
 
-	private static final String WORD = "When ";
+	private static final String WORD = "The ";
 	private static final String DESTINATION = "src/main/resources/decrypted.txt";
+
+	private static final String KEY_PART = "";
 
 	public static void main(String[] args) throws IOException {
 		List<String> ciphers = Files.lines(Path.of("src/main/resources/encrypted.txt"))
@@ -26,12 +28,18 @@ public class Main {
 				String cipher1 = ciphers.get(i);
 				String cipher2 = ciphers.get(j);
 
+				int minLength = Math.min(cipher1.length(), cipher2.length());
+				cipher1 = cipher1.substring(0, minLength);
+				cipher2 = cipher2.substring(0, minLength);
+
 				String xoredCiphers = xor(cipher1, cipher2);
 
 				String decrypted = xor(xoredCiphers, WORD);
 				double wordPercentage = wordPercentage(decrypted);
 
 				decryptedWords.put(wordPercentage, decrypted);
+
+				System.out.println("Source line: " + i + "; Result = " + decrypted);
 			}
 		}
 
@@ -58,8 +66,22 @@ public class Main {
 		return result.toString();
 	}
 
+	public static String stringToHex(String input) {
+		StringBuilder result = new StringBuilder();
+		for (char c : input.toCharArray()) {
+			result.append(Integer.toString(c, 16));
+		}
+		return result.toString();
+	}
+
 	public static String xor(String encrypted, String key) {
-		return new String(xor(encrypted.getBytes(), key.getBytes()));
+		byte[] bytes = xor(encrypted.getBytes(), key.getBytes());
+		StringBuilder result = new StringBuilder();
+		for (byte b : bytes) {
+			result.append((char) b);
+		}
+
+		return result.toString();
 	}
 
 	public static byte[] xor(byte[] encrypted, byte[] key) {
@@ -80,5 +102,9 @@ public class Main {
 		}
 
 		return (double) matchLength / text.length();
+	}
+
+	public static String getKeyPart(String encrypted, String decrypted) {
+		return xor(encrypted, decrypted);
 	}
 }
