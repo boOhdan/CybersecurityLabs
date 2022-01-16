@@ -19,8 +19,6 @@ public class Main {
 
 	private static final double MATCH_PERCENTAGE = 0.5;
 
-	private static final String KEY_PART = "";
-
 	public static void main(String[] args) throws IOException {
 		List<byte[]> ciphers = Files.lines(Path.of("src/main/resources/encrypted.txt"))
 				.map(Main::hexStringToNormal)
