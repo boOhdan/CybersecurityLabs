@@ -1,5 +1,7 @@
 package com.security.lab6.config;
 
+import com.security.lab6.kms.FakeKmsService;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,7 @@ import java.util.Base64;
 
 @Component
 @Converter
+@RequiredArgsConstructor
 public class AttributeEncryptor implements AttributeConverter<String, String> {
 
 	private final Key key;
@@ -25,10 +28,9 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
 	private final int tLen = 128;
 
 	private static final String AES = "AES/GCM/NoPadding";
-
-	public AttributeEncryptor(@Value("${secret.key.dek}") String dataEncryptionKey) {
-		key = new SecretKeySpec(dataEncryptionKey.getBytes(), "AES");
-	}
+	@Value("${secret.key.dek}")
+	private String dek;
+	private final FakeKmsService fakeKmsService;
 
 	@SneakyThrows
 	@Override
