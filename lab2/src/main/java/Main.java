@@ -14,10 +14,10 @@ public class Main {
 
 	private static final Pattern wordPattern = Pattern.compile("[\\p{Alpha} ]+");
 
-	private static final String WORD = "The ";
+	private static final String WORD = "And t";
 	private static final String DESTINATION = "src/main/resources/decrypted.txt";
 
-	private static final double MATCH_PERCENTAGE = 0.5;
+	private static final double MATCH_PERCENTAGE = 0.7;
 
 	public static void main(String[] args) throws IOException {
 		List<byte[]> ciphers = Files.lines(Path.of("src/main/resources/encrypted.txt"))
@@ -27,8 +27,11 @@ public class Main {
 		List<String> decryptedWords = new ArrayList<>();
 
 		for (int i = 0; i < ciphers.size(); i++) {
-			for (byte[] cipher2 : ciphers) {
+			for (int j = 0; j < ciphers.size(); j++) {
+				if (i == j) continue;
+
 				byte[] cipher1 = ciphers.get(i);
+				byte[] cipher2 = ciphers.get(j);
 
 				int minLength = Math.min(cipher1.length, cipher2.length);
 				byte[] cipher1Copy = new byte[minLength];
@@ -41,7 +44,7 @@ public class Main {
 				String decrypted = new String(xor(xoredCiphers, WORD.getBytes()));
 
 				if (wordMatches(decrypted)) {
-					decryptedWords.add("Source line: " + (i + 1) + "; Result = " + decrypted);
+					decryptedWords.add("Source lines: " + i + " " + j + "; Result = " + decrypted);
 				}
 			}
 		}
