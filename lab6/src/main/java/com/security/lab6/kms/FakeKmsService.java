@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.ByteBuffer;
 import java.security.Key;
 import java.security.SecureRandom;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.Base64;
 
 @Service
@@ -41,7 +42,19 @@ public class FakeKmsService {
         return new String(Base64.getEncoder().encode(byteBuffer.array()));
     }
 
+    @SneakyThrows
     public String decryptDek(String dek) {
-        return "";
+        if (dek == null) {
+            return "";
+        }
+
+        byte[] cipherText = Base64.getDecoder().decode(dek);
+        AlgorithmParameterSpec gcmIv = new GCMParameterSpec(tLen, cipherText, 0, GCM_IV_LENGTH);
+
+        var cipher = Cipher.getInstance(AES);
+        cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(kek.getBytes(), "AES"), gcmIv);
+
+        byte[] plainText = cipher.doFinal(cipherText, GCM_IV_LENGTH, cipherText.length - GCM_IV_LENGTH);
+        return new String(plainText);
     }
 }
