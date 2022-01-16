@@ -12,7 +12,6 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.nio.ByteBuffer;
-import java.security.Key;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Base64;
@@ -22,7 +21,6 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class AttributeEncryptor implements AttributeConverter<String, String> {
 
-	private final Key key;
 	private final SecureRandom secureRandom = new SecureRandom();
 	private static final int GCM_IV_LENGTH = 12;
 	private final int tLen = 128;
@@ -30,7 +28,7 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
 	private static final String AES = "AES/GCM/NoPadding";
 	@Value("${secret.key.dek}")
 	private String dek;
-	private final FakeKmsService fakeKmsService;
+	private final FakeKmsService kmsService;
 
 	@SneakyThrows
 	@Override
@@ -44,7 +42,8 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
 		var parameterSpec = new GCMParameterSpec(tLen, iv);
 
 		var cipher = Cipher.getInstance(AES);
-		cipher.init(Cipher.ENCRYPT_MODE, key, parameterSpec);
+		var key = kmsService.decryptDek(dek);
+		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getBytes(), "AES"), parameterSpec);
 
 		byte[] cipherText = cipher.doFinal(attribute.getBytes());
 		ByteBuffer byteBuffer = ByteBuffer.allocate(iv.length + cipherText.length);
@@ -65,7 +64,8 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
 		AlgorithmParameterSpec gcmIv = new GCMParameterSpec(tLen, cipherText, 0, GCM_IV_LENGTH);
 
 		var cipher = Cipher.getInstance(AES);
-		cipher.init(Cipher.DECRYPT_MODE, key, gcmIv);
+		var key = kmsService.decryptDek(dek);
+		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getBytes(), "AES"), gcmIv);
 
 		byte[] plainText = cipher.doFinal(cipherText, GCM_IV_LENGTH, cipherText.length - GCM_IV_LENGTH);
 		return new String(plainText);
