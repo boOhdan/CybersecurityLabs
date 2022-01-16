@@ -1,8 +1,9 @@
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -10,15 +11,15 @@ public class Main {
 
 	private static final Pattern wordPattern = Pattern.compile("[\\p{Alpha} ]+");
 
-	private static final String WORD = "The";
+	private static final String WORD = "When";
+	private static final String DESTINATION = "src/main/resources/decrypted.txt";
 
 	public static void main(String[] args) throws IOException {
 		List<String> ciphers = Files.lines(Path.of("src/main/resources/encrypted.txt"))
 				.map(Main::hexStringToNormal)
 				.collect(Collectors.toList());
 
-		double bestWordPercentage = -1;
-		String bestDecryptedText = null;
+		Map<Double, String> decryptedWords = new HashMap<>();
 
 		for (int i = 0; i < ciphers.size(); i++) {
 			for (int j = i + 1; j < ciphers.size(); j++) {
@@ -30,14 +31,21 @@ public class Main {
 				String decrypted = xor(xoredCiphers, WORD);
 				double wordPercentage = wordPercentage(decrypted);
 
-				if (wordPercentage > bestWordPercentage) {
-					bestWordPercentage = wordPercentage;
-					bestDecryptedText = decrypted;
-				}
+				decryptedWords.put(wordPercentage, decrypted);
 			}
 		}
 
-		System.out.println(bestDecryptedText);
+		var sortedList = decryptedWords.entrySet().stream()
+				.sorted(Map.Entry.<Double, String>comparingByKey().reversed())
+				.map(Map.Entry::getValue)
+				.collect(Collectors.toList());
+
+		try (PrintWriter writer = new PrintWriter(new FileWriter(DESTINATION))) {
+			for (String output : sortedList) {
+				writer.println(output);
+			}
+			writer.flush();
+		}
 	}
 
 	public static String hexStringToNormal(String hex) {
@@ -58,7 +66,7 @@ public class Main {
 		byte[] decrypted = new byte[encrypted.length];
 
 		for (int i = 0; i < decrypted.length; i++) {
-			decrypted[i] = (byte)(encrypted[i] ^ key[i % key.length]);
+			decrypted[i] = (byte) (encrypted[i] ^ key[i % key.length]);
 		}
 
 		return decrypted;
