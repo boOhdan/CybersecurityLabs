@@ -14,7 +14,7 @@ public class Main {
 
 	private static final Pattern wordPattern = Pattern.compile("[\\p{Alpha} ]+");
 
-	private static final String WORD = "The pangs ";
+	private static final String WORD = "No travel";
 	private static final String DESTINATION = "src/main/resources/decrypted.txt";
 
 	private static final double MATCH_PERCENTAGE = 0.7;
