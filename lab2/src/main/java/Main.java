@@ -11,7 +11,7 @@ public class Main {
 
 	private static final Pattern wordPattern = Pattern.compile("[\\p{Alpha} ]+");
 
-	private static final String WORD = "When";
+	private static final String WORD = "When ";
 	private static final String DESTINATION = "src/main/resources/decrypted.txt";
 
 	public static void main(String[] args) throws IOException {
@@ -43,8 +43,8 @@ public class Main {
 		try (PrintWriter writer = new PrintWriter(new FileWriter(DESTINATION))) {
 			for (String output : sortedList) {
 				writer.println(output);
+				writer.println();
 			}
-			writer.flush();
 		}
 	}
 
