@@ -16,6 +16,7 @@ public class Main {
 
 	private static final String WORD = "Than fly to others that we know not of?";
 	private static final String DESTINATION = "src/main/resources/decrypted.txt";
+	private static final String KEY = "src/main/resources/key.txt";
 
 	private static final double MATCH_PERCENTAGE = 0.95;
 
@@ -24,7 +25,7 @@ public class Main {
 				.map(Main::hexStringToNormal)
 				.collect(Collectors.toList());
 
-		List<String> decryptedWords = new ArrayList<>();
+		/*List<String> decryptedWords = new ArrayList<>();
 
 		for (int i = 0; i < ciphers.size(); i++) {
 			for (int j = 0; j < ciphers.size(); j++) {
@@ -54,6 +55,15 @@ public class Main {
 				writer.println(output);
 				writer.println();
 			}
+		}*/
+		findKey(new String(ciphers.get(0)), "For who would bear the whips and scorns of time,");
+	}
+
+	private static void findKey(String encrypted, String decrypted) {
+		try (PrintWriter writer = new PrintWriter(new FileWriter(KEY))) {
+			writer.println(Arrays.toString(xor(encrypted.getBytes(), decrypted.getBytes())));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
