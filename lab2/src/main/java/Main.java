@@ -14,10 +14,10 @@ public class Main {
 
 	private static final Pattern wordPattern = Pattern.compile("[\\p{Alpha} ]+");
 
-	private static final String WORD = "When he himself ";
+	private static final String WORD = "Than fly to other";
 	private static final String DESTINATION = "src/main/resources/decrypted.txt";
 
-	private static final double MATCH_PERCENTAGE = 0.6;
+	private static final double MATCH_PERCENTAGE = 0.7;
 
 	public static void main(String[] args) throws IOException {
 		List<byte[]> ciphers = Files.lines(Path.of("src/main/resources/encrypted.txt"))
