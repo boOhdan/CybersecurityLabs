@@ -14,7 +14,7 @@ public class Main {
 
 	private static final Pattern wordPattern = Pattern.compile("[\\p{Alpha} ]+");
 
-	private static final String WORD = "That patient ";
+	private static final String WORD = "When he himself ";
 	private static final String DESTINATION = "src/main/resources/decrypted.txt";
 
 	private static final double MATCH_PERCENTAGE = 0.6;
