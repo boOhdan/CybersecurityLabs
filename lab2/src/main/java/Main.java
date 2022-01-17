@@ -25,7 +25,7 @@ public class Main {
 				.map(Main::hexStringToNormal)
 				.collect(Collectors.toList());
 
-		/*List<String> decryptedWords = new ArrayList<>();
+		List<String> decryptedWords = new ArrayList<>();
 
 		for (int i = 0; i < ciphers.size(); i++) {
 			for (int j = 0; j < ciphers.size(); j++) {
@@ -55,8 +55,7 @@ public class Main {
 				writer.println(output);
 				writer.println();
 			}
-		}*/
-		findKey(ciphers.get(0), "For who would bear the whips and scorns of time,".getBytes());
+		}
 	}
 
 	private static void findKey(byte[] encrypted, byte[] decrypted) {
