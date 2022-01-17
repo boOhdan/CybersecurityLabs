@@ -56,12 +56,12 @@ public class Main {
 				writer.println();
 			}
 		}*/
-		findKey(new String(ciphers.get(0)), "For who would bear the whips and scorns of time,");
+		findKey(ciphers.get(0), "For who would bear the whips and scorns of time,".getBytes());
 	}
 
-	private static void findKey(String encrypted, String decrypted) {
+	private static void findKey(byte[] encrypted, byte[] decrypted) {
 		try (PrintWriter writer = new PrintWriter(new FileWriter(KEY))) {
-			writer.println(Arrays.toString(xor(encrypted.getBytes(), decrypted.getBytes())));
+			writer.println(Arrays.toString(xor(encrypted, decrypted)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
